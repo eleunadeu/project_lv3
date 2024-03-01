@@ -58,10 +58,12 @@ public class TutorController {
     }
 
 
-
-
     // 선택한 강사 삭제 delete tutor{id}
-
+    @DeleteMapping("/tutor/{tutorId}")
+    ResponseEntity<Integer> deleteTutor(@PathVariable Integer tutorId, HttpServletRequest request){
+        Integer deleteId =  tutorService.deleteTutor(tutorId, request);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 
 
 }

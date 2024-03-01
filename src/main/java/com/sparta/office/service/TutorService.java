@@ -87,6 +87,24 @@ public class TutorService {
         return lecture.stream().map(AdminLectureList::new).toList();
     }
 
+    public Integer deleteTutor(Integer tutorId, HttpServletRequest request) {
+        //filter에서 admin으로 넣어뒀다고 가정하고 진행
+//        Admin admin = (Admin) request.getAttribute("admin");
+//
+//        //권한 확인
+//        if (admin.getRole() != AdminRoleEnum.MANAGER) {
+//            // 매니저 아니니까 접근 불가
+//            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "접근 불가");
+//        }
+        //매니저라고 하고 삭제 진행
+        //유무 확인
+        Tutor tutor = tutorRepository.findById(tutorId).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "잘못된 강의 정보입니다!")
+        );
 
+        //있으니까 정상삭제하고 삭제한 번호 반환
+        tutorRepository.delete(tutor);
+        return tutorId;
+    }
 
 }

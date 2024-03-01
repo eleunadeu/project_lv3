@@ -9,6 +9,7 @@ import com.sparta.office.repository.LectureRepository;
 import com.sparta.office.repository.TutorRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -80,5 +81,25 @@ public class LectureService {
         List<LectureResponseDto> responseDtoList =
                 lectureRepository.findAllByCategoryOrderByRegisterAtDesc(category).stream().map(LectureResponseDto::new).toList();
         return responseDtoList;
+    }
+
+    public Integer deleteLecutre(Integer lectureId, HttpServletRequest request) {
+        //filter에서 admin으로 넣어뒀다고 가정하고 진행
+//        Admin admin = (Admin) request.getAttribute("admin");
+//
+//        //권한 확인
+//        if (admin.getRole() != AdminRoleEnum.MANAGER) {
+//            // 매니저 아니니까 접근 불가
+//            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "접근 불가");
+//        }
+        //매니저라고 하고 삭제 진행
+        //유무 확인
+        Lecture lecture = lectureRepository.findById(lectureId).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "잘못된 강의 정보입니다!")
+        );
+    
+        //있으니까 정상삭제하고 삭제한 번호 반환
+        lectureRepository.delete(lecture);
+        return lectureId;
     }
 }

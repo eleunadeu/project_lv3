@@ -8,6 +8,7 @@ import com.sparta.office.service.LectureService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +19,7 @@ import java.util.List;
 @RestController
 @RequestMapping("api")
 @RequiredArgsConstructor
+@Slf4j
 public class LectureController {
 
     private final LectureService lectureService;
@@ -45,7 +47,6 @@ public class LectureController {
 
 
     // 카테고리별 강의 목록 조회 get lectures/{category}
-
     @GetMapping("/lectures/{category}") //수정 내용
     public ResponseEntity<List<LectureResponseDto>> getLecturesByCategory(@PathVariable String category){
         List<LectureResponseDto> responseDto = lectureService.getLecturesByCategory(category);
@@ -53,7 +54,13 @@ public class LectureController {
     }
 
 
-
     // 선택한 강의 삭제  delete lecture/{id}
+    @DeleteMapping("lecture/{lectureId}")
+    ResponseEntity<Integer> deleteLecutre(@PathVariable Integer lectureId, HttpServletRequest request){
+        Integer deleteId =  lectureService.deleteLecutre(lectureId,request);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+
 
 }
