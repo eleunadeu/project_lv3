@@ -1,13 +1,11 @@
 package com.sparta.office.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Entity
 @Getter
+@Entity
 @NoArgsConstructor
-@Table(name = "tutor")
 public class Tutor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,8 +22,17 @@ public class Tutor {
     private String phone; // 핸드폰번호
 
     @Column(name = "intro",nullable = false)
-    private String Intro; // 강사소개
+    private String intro; // 강사소개
 
     @Column(name="company",nullable = false)
     private String company; // 소속회사
+
+    @Builder
+    public Tutor(String tutorName, Integer career, String phone, String intro, String company) {
+        this.tutorName = tutorName;
+        this.career = career;
+        this.phone = phone;
+        this.intro = intro;
+        this.company = company;
+    }
 }

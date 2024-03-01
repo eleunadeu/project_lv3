@@ -2,8 +2,7 @@ package com.sparta.office.entity;
 
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -11,8 +10,9 @@ import java.time.LocalDate;
 
 @Entity
 @Getter
-@NoArgsConstructor
-@Table(name = "lecture")
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
 public class Lecture {
     @Id
@@ -20,15 +20,15 @@ public class Lecture {
     @Column(name="lecture_id")
     private Integer id; // 강의 고유 번호
 
-    @Column(name="lecture_name")
+    @Column(name="lecture_name", nullable = false)
     private String lectureName; // 강의 이름
 
-    @Column(name="lecture_intro")
+    @Column(name="lecture_intro", nullable = false)
     private String intro; //강의소개
 
-    @Enumerated(EnumType.STRING)
+
     @Column(name="category",nullable = false)
-    private Category category; // 카테고리  enum으로 관리
+    private String category; // 카테고리  enum으로 관리
 
     //fk 설정
     @ManyToOne
