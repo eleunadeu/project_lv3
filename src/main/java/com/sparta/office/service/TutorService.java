@@ -1,10 +1,14 @@
 package com.sparta.office.service;
 
+import com.sparta.office.dto.AdminLectureList;
+import com.sparta.office.dto.LectureResponseDto;
 import com.sparta.office.dto.TutorRequestDto;
 import com.sparta.office.dto.TutorResponseDto;
 import com.sparta.office.entity.Admin;
 import com.sparta.office.entity.AdminRoleEnum;
+import com.sparta.office.entity.Lecture;
 import com.sparta.office.entity.Tutor;
+import com.sparta.office.repository.LectureRepository;
 import com.sparta.office.repository.TutorRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -14,11 +18,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class TutorService {
 
     private final TutorRepository tutorRepository;
+    private final LectureRepository lectureRepository;
 
     @Transactional
     public TutorResponseDto createTutor(TutorRequestDto requestDto) {
@@ -70,4 +77,16 @@ public class TutorService {
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "강사 정보가 없습니다.")
         ));
     }
+
+
+    //선택한 강사가 촬영한 강의 목록, 등록일 기준 내림차순
+    @Transactional(readOnly = true)
+    public List<AdminLectureList> getTutorLecutreList(Integer tutorId) {
+        // 오름 차순으로 가져오기
+        List<Lecture> lecture = lectureRepository.findByTutorIdOrderByRegisterAtDesc(tutorId);
+        return lecture.stream().map(AdminLectureList::new).toList();
+    }
+
+
+
 }

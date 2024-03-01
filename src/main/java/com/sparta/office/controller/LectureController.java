@@ -10,7 +10,10 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("api")
@@ -28,16 +31,28 @@ public class LectureController {
 
     //선택한 강의 수정 put lecture/{id}
     @PutMapping("/lecture/{lectureId}") //수정 내용
-    public ResponseEntity<LectureResponseDto> modifyLectureInfo(@PathVariable Integer lectureId, @RequestBody LectureRequestDto requestDto, HttpServletRequest request){
-        LectureResponseDto responseDto = lectureService.modifyLectureInfo(lectureId,requestDto,request);
+    public ResponseEntity<LectureResponseDto> modifyLecture(@PathVariable Integer lectureId, @RequestBody LectureRequestDto requestDto, HttpServletRequest request){
+        LectureResponseDto responseDto = lectureService.modifyLecture(lectureId,requestDto,request);
+        return new ResponseEntity<>(responseDto, HttpStatus.OK);
+    }
+
+    // 선택한 강의 조회 get lecture/{id}
+    @GetMapping("/lecture/{lectureId}") //수정 내용
+    public ResponseEntity<LectureResponseDto> getLectureInfo(@PathVariable Integer lectureId){
+        LectureResponseDto responseDto = lectureService.getLectureInfo(lectureId);
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
 
-
-    // 선택한 강의 조회 get lecture/{id}
-
     // 카테고리별 강의 목록 조회 get lectures/{category}
+
+    @GetMapping("/lectures/{category}") //수정 내용
+    public ResponseEntity<List<LectureResponseDto>> getLecturesByCategory(@PathVariable String category){
+        List<LectureResponseDto> responseDto = lectureService.getLecturesByCategory(category);
+        return new ResponseEntity<>(responseDto, HttpStatus.OK);
+    }
+
+
 
     // 선택한 강의 삭제  delete lecture/{id}
 

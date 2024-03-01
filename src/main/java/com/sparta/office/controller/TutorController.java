@@ -1,5 +1,7 @@
 package com.sparta.office.controller;
 
+import com.sparta.office.dto.AdminLectureList;
+import com.sparta.office.dto.LectureResponseDto;
 import com.sparta.office.dto.TutorRequestDto;
 import com.sparta.office.dto.TutorResponseDto;
 import com.sparta.office.service.TutorService;
@@ -10,6 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -46,9 +50,18 @@ public class TutorController {
     }
 
 
+    // 선택한 강사가 촬영한 강의 목록 조회 get tutor/{id}
+    @GetMapping("/tutor/{tutorId}/lectures")
+    public ResponseEntity<List<AdminLectureList>> getTutorLecutreList(@PathVariable Integer tutorId){
+        List<AdminLectureList> responseDto = tutorService.getTutorLecutreList(tutorId);
+        return new ResponseEntity<>(responseDto, HttpStatus.OK); // 정상 상태코드 같이 보내기
+    }
+
+
+
 
     // 선택한 강사 삭제 delete tutor{id}
 
-    // 선택한 강사가 촬영한 강의 목록 조회 get tutor/{id}
+
 
 }

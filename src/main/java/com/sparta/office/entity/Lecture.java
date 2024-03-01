@@ -32,7 +32,7 @@ public class Lecture {
     private String category;
 
     //fk 설정
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="tutor_id")
     private Tutor tutor; //강사 외래키 설정
 

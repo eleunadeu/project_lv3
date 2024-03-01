@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class LectureService {
@@ -31,7 +33,7 @@ public class LectureService {
                 .lectureName(requestDto.getLectureName())
                 .price(requestDto.getPrice())
                 .intro(requestDto.getIntro())
-                .category(requestDto.getIntro())
+                .category(requestDto.getCategory())
                 .tutor(tutor) // 외래키 넣기
                 .build();
 
@@ -40,7 +42,7 @@ public class LectureService {
     }
 
     @Transactional
-    public LectureResponseDto modifyLectureInfo(Integer lectureId, LectureRequestDto requestDto, HttpServletRequest request) {
+    public LectureResponseDto modifyLecture(Integer lectureId, LectureRequestDto requestDto, HttpServletRequest request) {
         //filter에서 admin으로 넣어뒀다고 가정하고 진행
 //        Admin admin = (Admin) request.getAttribute("admin");
 //
@@ -49,7 +51,6 @@ public class LectureService {
 //            // 매니저 아니니까 접근 불가
 //            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "접근 불가");
 //        }
-
         // 강의가 있으면 정보 수정 // 강의명, 가격, 소개, 카테고리 수정
         Lecture lecture = lectureRepository.findById(lectureId).orElseThrow( // entitynotfound
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "강의 정보가 없습니다.")
@@ -63,5 +64,21 @@ public class LectureService {
 
         // 업데이트 된 내용 리턴
         return new LectureResponseDto(lecture);
+    }
+
+
+    // 선택한 강의 정보조회
+    public LectureResponseDto getLectureInfo(Integer lectureId) {
+
+        return new LectureResponseDto(lectureRepository.findById(lectureId).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "잘못된 강의 정보입니다!")
+        ));
+    }
+
+
+    public List<LectureResponseDto> getLecturesByCategory(String category) {
+        List<LectureResponseDto> responseDtoList =
+                lectureRepository.findAllByCategoryOrderByRegisterAtDesc(category).stream().map(LectureResponseDto::new).toList();
+        return responseDtoList;
     }
 }
