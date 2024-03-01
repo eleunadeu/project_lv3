@@ -38,8 +38,6 @@ public class TutorController {
     }
 
 
-
-
     // 선택한 강사 정보 수정 put tutor/{id} -> admin 만 할 수 있음
     @PutMapping("/tutor/{tutorId}") //수정 내용
     public ResponseEntity<TutorResponseDto> modifyTutorInfo(@PathVariable Integer tutorId,@RequestBody TutorRequestDto requestDto, HttpServletRequest request){

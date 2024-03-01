@@ -2,10 +2,7 @@ package com.sparta.office.entity;
 
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -13,9 +10,7 @@ import java.time.LocalDate;
 
 @Entity
 @Getter
-
-@AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 public class Lecture {
     @Id
@@ -26,12 +21,15 @@ public class Lecture {
     @Column(name="lecture_name", nullable = false)
     private String lectureName; // 강의 이름
 
+    @Column(name="price", nullable = false)
+    private int price;
+
     @Column(name="lecture_intro", nullable = false)
     private String intro; //강의소개
 
 
     @Column(name="category",nullable = false)
-    private String category; // 카테고리  enum으로 관리
+    private String category;
 
     //fk 설정
     @ManyToOne
@@ -43,4 +41,12 @@ public class Lecture {
     @Temporal(TemporalType.DATE)
     private LocalDate registerAt; // 강의 등록일
 
+    @Builder
+    public Lecture(String lectureName, int price, String intro, String category, Tutor tutor){
+        this.lectureName=lectureName;
+        this.price=price;
+        this.intro=intro;
+        this.category=category;
+        this.tutor=tutor;
+    }
 }
