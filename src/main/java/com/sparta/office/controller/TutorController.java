@@ -26,8 +26,6 @@ public class TutorController {
     @PostMapping("/tutor")
     public ResponseEntity<TutorResponseDto> createTutor(@Valid @RequestBody TutorRequestDto requestDto){
         TutorResponseDto responseDto = tutorService.createTutor(requestDto);
-        log.info("loginfo");
-        log.error("error message");
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED); // 강의 등록 상태코드 같이 보내기
     }
 
@@ -43,10 +41,10 @@ public class TutorController {
 
 
     // 선택한 강사 정보 수정 put tutor/{id} -> admin 만 할 수 있음
-    @PutMapping("/tutor/{tutorId}")
-    public ResponseEntity<TutorResponseDto> modifyTutorInfo(@RequestBody TutorRequestDto requestDto, HttpServletRequest request){
-                tutorService.modifyTutorInfo(requestDto,request);
-        return null;
+    @PutMapping("/tutor/{tutorId}") //수정 내용
+    public ResponseEntity<TutorResponseDto> modifyTutorInfo(@PathVariable Integer tutorId,@RequestBody TutorRequestDto requestDto, HttpServletRequest request){
+        TutorResponseDto responseDto = tutorService.modifyTutorInfo(tutorId,requestDto,request);
+        return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
 

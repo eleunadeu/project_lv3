@@ -2,11 +2,14 @@ package com.sparta.office.service;
 
 import com.sparta.office.dto.TutorRequestDto;
 import com.sparta.office.dto.TutorResponseDto;
+import com.sparta.office.entity.Admin;
+import com.sparta.office.entity.AdminRoleEnum;
 import com.sparta.office.entity.Tutor;
 import com.sparta.office.repository.TutorRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
@@ -35,13 +38,35 @@ public class TutorService {
 
     // 선택 강사 정보 조회
     public TutorResponseDto getTutorInfo(Integer tutorId) {
-
         return new TutorResponseDto(tutorRepository.findById(tutorId).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "강사 정보가 없습니다.")
         ));
     }
 
-    public void modifyTutorInfo(TutorRequestDto requestDto, HttpServletRequest request) {
-        //user 권한 확인
+    // dirty checking
+    @Transactional
+    public TutorResponseDto modifyTutorInfo(Integer tutorId, TutorRequestDto requestDto, HttpServletRequest request) {
+        //filter에서 admin으로 넣어뒀다고 가정하고 진행
+//        Admin admin = (Admin) request.getAttribute("admin");
+//
+//        //권한 확인
+//        if (admin.getRole() != AdminRoleEnum.MANAGER) {
+//            // 매니저 아니니까 접근 불가
+//            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "접근 불가");
+//        }
+
+        // 강사가 있으면 정보 수정 // 강의명, 가격, 소개, 카테고리 수정
+        Tutor tutor = tutorRepository.findById(tutorId).orElseThrow( // entitynotfound
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "강사 정보가 없습니다.")
+        );
+
+        // 수정된 내용 업데이트
+        tutor.update(requestDto.getCareer(),
+                    requestDto.getCompany(),
+                    requestDto.getPhone(),
+                    requestDto.getIntro()); // 업데이트 되면 덜티체킹하면서 알아서 업데이트 될거임
+
+        // 업데이트 된 내용 리턴
+        return new TutorResponseDto(tutor);
     }
 }

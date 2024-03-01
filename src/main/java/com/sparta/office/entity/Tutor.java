@@ -35,4 +35,12 @@ public class Tutor {
         this.intro = intro;
         this.company = company;
     }
+
+
+    public void update(Integer career, String company, String phone, String intro) {
+        this.career = career;
+        this.company = company;
+        this.phone = phone;
+        this.intro = intro;
+    }
 }
