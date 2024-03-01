@@ -3,16 +3,18 @@ package com.sparta.office.controller;
 import com.sparta.office.dto.TutorRequestDto;
 import com.sparta.office.dto.TutorResponseDto;
 import com.sparta.office.service.TutorService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/tutor")
+@RequestMapping("/api")
 public class TutorController {
     //- 로그인을 통해 발급받은 JWT가 함께 요청됩니다.
     //- 관리자만 강사 등록이 가능합
@@ -21,19 +23,36 @@ public class TutorController {
 
 
     //강사 등록 post tutor
-    @PostMapping("/")
-    public ResponseEntity<TutorResponseDto> createTutor(@RequestBody TutorRequestDto requestDto){
+    @PostMapping("/tutor")
+    public ResponseEntity<TutorResponseDto> createTutor(@Valid @RequestBody TutorRequestDto requestDto){
         TutorResponseDto responseDto = tutorService.createTutor(requestDto);
+        log.info("loginfo");
+        log.error("error message");
+        return new ResponseEntity<>(responseDto, HttpStatus.CREATED); // 강의 등록 상태코드 같이 보내기
+    }
+
+
+    //선택한 강사 정보 조회 get tutor/{id}
+    @GetMapping("/tutor/{tutorId}")
+    public ResponseEntity<TutorResponseDto> getTutorInfo(@PathVariable Integer tutorId){
+        TutorResponseDto responseDto = tutorService.getTutorInfo(tutorId);
+        return new ResponseEntity<>(responseDto, HttpStatus.OK); // 정상 상태코드 같이 보내기
+    }
+
+
+
+
+    // 선택한 강사 정보 수정 put tutor/{id} -> admin 만 할 수 있음
+    @PutMapping("/tutor/{tutorId}")
+    public ResponseEntity<TutorResponseDto> modifyTutorInfo(@RequestBody TutorRequestDto requestDto, HttpServletRequest request){
+                tutorService.modifyTutorInfo(requestDto,request);
         return null;
     }
 
-    //선택한 강사 정보 조회 get tutor/{id}
 
-
-    // 선택한 강사 정보 수정 put tutor/{id}
-
-    // 선택한 강사가 촬영한 강의 목록 조회 get tutor/{id}
 
     // 선택한 강사 삭제 delete tutor{id}
+
+    // 선택한 강사가 촬영한 강의 목록 조회 get tutor/{id}
 
 }
