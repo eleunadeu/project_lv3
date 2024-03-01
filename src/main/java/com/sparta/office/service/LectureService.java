@@ -2,10 +2,12 @@ package com.sparta.office.service;
 
 import com.sparta.office.dto.LectureRequestDto;
 import com.sparta.office.dto.LectureResponseDto;
+import com.sparta.office.dto.TutorResponseDto;
 import com.sparta.office.entity.Lecture;
 import com.sparta.office.entity.Tutor;
 import com.sparta.office.repository.LectureRepository;
 import com.sparta.office.repository.TutorRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -35,5 +37,31 @@ public class LectureService {
 
         // db에 저장
         return new LectureResponseDto(lectureRepository.save(lecture));
+    }
+
+    @Transactional
+    public LectureResponseDto modifyLectureInfo(Integer lectureId, LectureRequestDto requestDto, HttpServletRequest request) {
+        //filter에서 admin으로 넣어뒀다고 가정하고 진행
+//        Admin admin = (Admin) request.getAttribute("admin");
+//
+//        //권한 확인
+//        if (admin.getRole() != AdminRoleEnum.MANAGER) {
+//            // 매니저 아니니까 접근 불가
+//            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "접근 불가");
+//        }
+
+        // 강의가 있으면 정보 수정 // 강의명, 가격, 소개, 카테고리 수정
+        Lecture lecture = lectureRepository.findById(lectureId).orElseThrow( // entitynotfound
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "강의 정보가 없습니다.")
+        );
+
+        // 수정된 내용 업데이트
+        lecture.update(requestDto.getLectureName(),
+                requestDto.getPrice(),
+                requestDto.getIntro(),
+                requestDto.getCategory()); // 업데이트 되면 덜티체킹하면서 알아서 업데이트 될거임
+
+        // 업데이트 된 내용 리턴
+        return new LectureResponseDto(lecture);
     }
 }

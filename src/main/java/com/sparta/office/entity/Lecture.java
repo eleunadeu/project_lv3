@@ -49,4 +49,11 @@ public class Lecture {
         this.category=category;
         this.tutor=tutor;
     }
+
+    public void update(String lectureName, int price, String intro, String category) {
+        this.lectureName = lectureName;
+        this.price = price;
+        this.intro = intro;
+        this.category = category;
+    }
 }

@@ -36,12 +36,6 @@ public class TutorService {
         return new TutorResponseDto(tutorRepository.save(tutor));
     }
 
-    // 선택 강사 정보 조회
-    public TutorResponseDto getTutorInfo(Integer tutorId) {
-        return new TutorResponseDto(tutorRepository.findById(tutorId).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "강사 정보가 없습니다.")
-        ));
-    }
 
     // dirty checking
     @Transactional
@@ -55,7 +49,7 @@ public class TutorService {
 //            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "접근 불가");
 //        }
 
-        // 강사가 있으면 정보 수정 // 강의명, 가격, 소개, 카테고리 수정
+        // 강사가 있으면 정보 수정 // 연차, 회사, 핸드폰번호, 소개 수정
         Tutor tutor = tutorRepository.findById(tutorId).orElseThrow( // entitynotfound
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "강사 정보가 없습니다.")
         );
@@ -68,5 +62,12 @@ public class TutorService {
 
         // 업데이트 된 내용 리턴
         return new TutorResponseDto(tutor);
+    }
+
+    // 선택 강사 정보 조회
+    public TutorResponseDto getTutorInfo(Integer tutorId) {
+        return new TutorResponseDto(tutorRepository.findById(tutorId).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "강사 정보가 없습니다.")
+        ));
     }
 }
