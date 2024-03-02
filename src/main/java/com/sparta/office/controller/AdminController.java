@@ -50,7 +50,7 @@ public class AdminController {
     }
 
     @PostMapping("/admin/login")
-    public ResponseEntity<AdminResponseDto> login(@RequestBody LoginRequestDto requestDto) {
+    public ResponseEntity<AdminResponseDto> login(@Valid @RequestBody LoginRequestDto requestDto) {
         Optional<AdminRoleEnum> roleOptional = authenticationService.getAdminRoleByEmail(requestDto.getEmail());
         if (roleOptional.isPresent()) {
             AdminRoleEnum role = roleOptional.get();

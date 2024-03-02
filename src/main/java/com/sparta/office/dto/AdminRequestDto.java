@@ -17,5 +17,12 @@ public class AdminRequestDto {
     @NotBlank
     private AdminRoleEnum role;
     private boolean admin = false;
-    private String adminToken = "";
+    private String adminToken;
+
+    public AdminRequestDto(String email, String password, String team, String adminToken) {
+        this.email = email;
+        this.password = password;
+        this.team = team;
+        this.adminToken = adminToken;
+    }
 }
