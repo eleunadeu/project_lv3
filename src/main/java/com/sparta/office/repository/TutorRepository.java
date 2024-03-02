@@ -1,5 +1,6 @@
 package com.sparta.office.repository;
 
+import com.sparta.office.entity.Lecture;
 import com.sparta.office.entity.Tutor;
 import org.springframework.data.jpa.repository.JpaRepository;
 
