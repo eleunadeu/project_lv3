@@ -73,6 +73,7 @@ public class TutorService {
     //선택한 강사가 촬영한 강의 목록, 등록일 기준 내림차순
     @Transactional(readOnly = true)
     public List<AdminLectureList> getTutorLecutreList(Integer tutorId) {
+
         // 오름 차순으로 가져오기
         List<Lecture> lecture = lectureRepository.findByTutorIdOrderByRegisterAtDesc(tutorId);
         return lecture.stream().map(AdminLectureList::new).toList();
