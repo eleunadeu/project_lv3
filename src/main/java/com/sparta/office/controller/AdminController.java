@@ -1,26 +1,16 @@
 package com.sparta.office.controller;
 
 import com.sparta.office.dto.AdminRequestDto;
-import com.sparta.office.dto.AdminResponseDto;
-import com.sparta.office.dto.LoginRequestDto;
-import com.sparta.office.entity.AdminRoleEnum;
-import com.sparta.office.jwt.JwtUtil;
 import com.sparta.office.service.AdminService;
-import com.sparta.office.service.AuthenticationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -29,38 +19,18 @@ import java.util.Optional;
 public class AdminController {
 
     private final AdminService adminService;
-    private final AuthenticationService authenticationService;
-    private final JwtUtil jwtUtil;
 
-    @PostMapping("admin/signup")
-    public String signup(@Valid AdminRequestDto requestDto, BindingResult bindingResult) {
-        // Validation 예외처리
-        List<FieldError> fieldErrors = bindingResult.getFieldErrors();
-        if (!fieldErrors.isEmpty()) {
-            for (FieldError fieldError : bindingResult.getFieldErrors()) {
-                log.error(fieldError.getField() + " 필드 : " + fieldError.getDefaultMessage());
-            }
-            return "redirect:/api/admin/signup";
+    @PostMapping("/admin/signup")
+    public ResponseEntity<String> signup(@RequestBody @Valid AdminRequestDto requestDto, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            // Validation 에러 메시지 처리
+            return ResponseEntity.badRequest().body("회원가입 양식의 오류를 확인해주세요.");
         }
 
         // 회원가입 처리
         adminService.signup(requestDto);
 
-        return "redirect:/api/admin/login-page";
-    }
-
-    @PostMapping("/admin/login")
-    public ResponseEntity<AdminResponseDto> login(@Valid @RequestBody LoginRequestDto requestDto) {
-        Optional<AdminRoleEnum> roleOptional = authenticationService.getAdminRoleByEmail(requestDto.getEmail());
-        if (roleOptional.isPresent()) {
-            AdminRoleEnum role = roleOptional.get();
-            String token = jwtUtil.createToken(requestDto.getEmail(), role);
-            AdminResponseDto response = new AdminResponseDto(token, "");
-            return ResponseEntity.status(HttpStatus.OK).body(response);
-        } else {
-            // 사용자가 없거나 권한을 찾을 수 없는 경우
-            String token = "";
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new AdminResponseDto(token, "Error: Authentication failed"));
-        }
+        // HTTP 상태 코드 200 반환과 함께 메시지 포함
+        return ResponseEntity.ok("회원가입에 성공했습니다. 로그인 페이지로 이동해 로그인을 진행해주세요.");
     }
 }

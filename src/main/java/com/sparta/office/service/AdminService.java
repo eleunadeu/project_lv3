@@ -5,7 +5,7 @@ import com.sparta.office.entity.Admin;
 import com.sparta.office.entity.AdminRoleEnum;
 import com.sparta.office.repository.AdminRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
 @RequiredArgsConstructor
 public class AdminService {
     private final AdminRepository adminRepository;
-    private static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+    private final PasswordEncoder passwordEncoder;
 
     // ADMIN_TOKEN -> 환경변수 값으로 변경 예정
     private static final Map<String, AdminRoleEnum> tokenRoleMap = Map.of(
@@ -37,7 +37,7 @@ public class AdminService {
                     "영어 대소문자(a~zA~Z), 숫자, 특수문자 !@#$%^&*()_~만 사용 가능합니다.");
         }
         // 비밀번호 암호화
-        encoder.encode(password);
+        password = passwordEncoder.encode(requestDto.getPassword());
 
         // email 중복 확인
         String email = requestDto.getEmail();

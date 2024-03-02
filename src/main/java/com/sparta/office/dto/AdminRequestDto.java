@@ -7,6 +7,7 @@ import lombok.Getter;
 
 @Getter
 public class AdminRequestDto {
+
     @Email
     @NotBlank
     private String email;
@@ -14,8 +15,7 @@ public class AdminRequestDto {
     private String password;
     @NotBlank
     private String team;
-    @NotBlank
-    private AdminRoleEnum role;
+
     private boolean admin = false;
     private String adminToken;
 

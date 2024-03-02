@@ -8,6 +8,15 @@ import lombok.Getter;
 public class LoginRequestDto {
     @Email
     private String email;
-    @NotBlank
+
     private String password;
+
+    public LoginRequestDto() {
+        // 기본 생성자
+    }
+
+    public LoginRequestDto(String email, String password) {
+        this.email = email;
+        this.password = password;
+    }
 }
