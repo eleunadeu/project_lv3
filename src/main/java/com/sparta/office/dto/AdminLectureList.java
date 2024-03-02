@@ -16,6 +16,7 @@ public class AdminLectureList { // 관리자가 조회한 강의 목록
 
 
     public AdminLectureList(Lecture lecture) {
+        
         this.tutorId = lecture.getTutor().getId();
         this.tutorName = lecture.getTutor().getTutorName();
 
