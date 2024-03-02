@@ -46,16 +46,7 @@ public class TutorService {
 
     // dirty checking
     @Transactional
-    public TutorResponseDto modifyTutorInfo(Integer tutorId, TutorRequestDto requestDto, HttpServletRequest request) {
-        //filter에서 admin으로 넣어뒀다고 가정하고 진행
-//        Admin admin = (Admin) request.getAttribute("admin");
-//
-//        //권한 확인
-//        if (admin.getRole() != AdminRoleEnum.MANAGER) {
-//            // 매니저 아니니까 접근 불가
-//            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "접근 불가");
-//        }
-
+    public TutorResponseDto modifyTutorInfo(Integer tutorId, TutorRequestDto requestDto) {
         // 강사가 있으면 정보 수정 // 연차, 회사, 핸드폰번호, 소개 수정
         Tutor tutor = tutorRepository.findById(tutorId).orElseThrow( // entitynotfound
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "강사 정보가 없습니다.")
@@ -87,16 +78,7 @@ public class TutorService {
         return lecture.stream().map(AdminLectureList::new).toList();
     }
 
-    public Integer deleteTutor(Integer tutorId, HttpServletRequest request) {
-        //filter에서 admin으로 넣어뒀다고 가정하고 진행
-//        Admin admin = (Admin) request.getAttribute("admin");
-//
-//        //권한 확인
-//        if (admin.getRole() != AdminRoleEnum.MANAGER) {
-//            // 매니저 아니니까 접근 불가
-//            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "접근 불가");
-//        }
-        //매니저라고 하고 삭제 진행
+    public Integer deleteTutor(Integer tutorId) {
         //유무 확인
         Tutor tutor = tutorRepository.findById(tutorId).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "잘못된 강의 정보입니다!")

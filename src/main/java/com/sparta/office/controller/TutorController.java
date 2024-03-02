@@ -4,6 +4,7 @@ import com.sparta.office.dto.AdminLectureList;
 import com.sparta.office.dto.LectureResponseDto;
 import com.sparta.office.dto.TutorRequestDto;
 import com.sparta.office.dto.TutorResponseDto;
+import com.sparta.office.entity.AdminRoleEnum;
 import com.sparta.office.service.TutorService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -11,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -43,9 +45,10 @@ public class TutorController {
 
 
     // 선택한 강사 정보 수정 put tutor/{id} -> admin 만 할 수 있음
+    @Secured(AdminRoleEnum.Authority.MANAGER)
     @PutMapping("/tutor/{tutorId}") //수정 내용
-    public ResponseEntity<TutorResponseDto> modifyTutorInfo(@PathVariable Integer tutorId,@RequestBody TutorRequestDto requestDto, HttpServletRequest request){
-        TutorResponseDto responseDto = tutorService.modifyTutorInfo(tutorId,requestDto,request);
+    public ResponseEntity<TutorResponseDto> modifyTutorInfo(@PathVariable Integer tutorId,@RequestBody TutorRequestDto requestDto){
+        TutorResponseDto responseDto = tutorService.modifyTutorInfo(tutorId,requestDto);
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
@@ -59,11 +62,11 @@ public class TutorController {
 
 
     // 선택한 강사 삭제 delete tutor{id}
+    @Secured(AdminRoleEnum.Authority.MANAGER)
     @DeleteMapping("/tutor/{tutorId}")
-    ResponseEntity<Integer> deleteTutor(@PathVariable Integer tutorId, HttpServletRequest request){
-        Integer deleteId =  tutorService.deleteTutor(tutorId, request);
+    ResponseEntity<Integer> deleteTutor(@PathVariable Integer tutorId){
+        Integer deleteId =  tutorService.deleteTutor(tutorId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-
 
 }
