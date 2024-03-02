@@ -97,7 +97,7 @@ public class LectureService {
         Lecture lecture = lectureRepository.findById(lectureId).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "잘못된 강의 정보입니다!")
         );
-    
+
         //있으니까 정상삭제하고 삭제한 번호 반환
         lectureRepository.delete(lecture);
         return lectureId;
